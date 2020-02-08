@@ -39,7 +39,6 @@ WORKDIR /home/zondax
 USER zondax
 
 ADD entrypoint.sh /home/zondax/entrypoint.sh
-ADD setup_stm.sh /home/zondax/setup_stm.sh
 RUN mkdir -p /home/zondax/shared
 
 RUN git config --global user.email "info@zondax.ch"
