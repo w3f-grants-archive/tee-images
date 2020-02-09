@@ -26,4 +26,4 @@ pull:
 	docker pull $(DOCKER_IMAGE)
 
 shell:
-	$(call run_docker,tmux)
+	$(call run_docker,zsh)

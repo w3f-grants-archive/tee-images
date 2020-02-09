@@ -21,19 +21,11 @@ This will give you a zsh session with environment ready to start:
 You can build the full/default image:
 ```
 bitbake st-image-weston
-bitbake optee-os-stm32mp        # OP-TEE core firmware
-bitbake optee-client            # OP-TEE client
-bitbake optee-test              # OP-TEE test suite (optional)
-bitbake optee-examples
 ```
 
 or try something leaner instead
 ```
 bitbake st-image-core
-bitbake optee-os-stm32mp        # OP-TEE core firmware
-bitbake optee-client            # OP-TEE client
-bitbake optee-test              # OP-TEE test suite (optional)
-bitbake optee-examples
 ```
 
 ## Creating an image
