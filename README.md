@@ -6,10 +6,9 @@
 
 the shared directory can be used to exchange information with the build container.
 
-Once inside the container:
+Once inside the container, to initialize the environment type:
 ```
-cd shared
-./setup_stm.sh
+stm
 ```
 
 This will give you a bash session with environment ready to start:

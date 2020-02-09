@@ -23,7 +23,7 @@ RUN apt-get update && \
 
 # Other useful packages
 RUN apt-get update && \
-    apt-get -y install repo ccache sudo wget cpio locales gdisk
+    apt-get -y install repo ccache sudo wget cpio locales gdisk tmux
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
@@ -44,6 +44,8 @@ RUN mkdir -p /home/zondax/shared
 RUN git config --global user.email "info@zondax.ch"
 RUN git config --global user.name "zondax"
 RUN git config --global color.ui true
+
+RUN echo "alias stm='$HOME/shared/setup_stm.sh'" >> $HOME/.bashrc
 
 ####################################
 ####################################

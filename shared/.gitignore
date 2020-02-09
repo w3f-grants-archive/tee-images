@@ -1,0 +1,4 @@
+/openstlinux-*/.repo
+/openstlinux-*/layers
+/openstlinux-*/build-*/*
+!**/build-*/conf

@@ -1,0 +1,4 @@
+SANITY_VERSION 1
+TMPDIR /home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/tmp-glibc
+SSTATE_DIR /home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/sstate-cache
+NATIVELSBSTRING ubuntu-18.04

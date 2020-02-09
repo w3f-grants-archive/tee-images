@@ -7,6 +7,6 @@ echo "Zondax STM32-OPTEE container - zondax.ch"
 echo "----------------------------------------"
 echo
 
-# CUSTOMIZE CONTAINER START UP
+# ADD ANYTHING HERE TO CUSTOMIZE CONTAINER START UP
 
 bash -c "trap 'exit' SIGTERM SIGINT; $@"
