@@ -23,17 +23,18 @@ RUN apt-get update && \
 
 # Other useful packages
 RUN apt-get update && \
-    apt-get -y install repo ccache sudo wget cpio locales gdisk tmux
+    apt-get -y install repo ccache sudo wget cpio locales gdisk tmux zsh
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_US.UTF-8
 ENV LANG en_US.UTF-8 
+RUN chsh -s $(which zsh)
 
 ####################################
 ####################################
 # Create zondax user
-RUN adduser --disabled-password --gecos "" -u 1000 zondax
+RUN adduser --disabled-password --gecos "" -u 1000 --shell /usr/bin/zsh zondax
 RUN echo "zondax ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 WORKDIR /home/zondax
 USER zondax
@@ -45,7 +46,14 @@ RUN git config --global user.email "info@zondax.ch"
 RUN git config --global user.name "zondax"
 RUN git config --global color.ui true
 
-RUN echo "alias stm='$HOME/shared/setup_stm.sh'" >> $HOME/.bashrc
+ENV ZSH_THEME agnoster
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" ""  --unattended
+RUN cd $HOME; \
+    git clone https://github.com/gpakosz/.tmux.git; \
+    ln -s -f .tmux/.tmux.conf ; \
+    cp .tmux/.tmux.conf.local .
+
+RUN echo "alias stm='$HOME/shared/setup_stm.sh'" >> $HOME/.zshrc
 
 ####################################
 ####################################

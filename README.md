@@ -11,7 +11,7 @@ Once inside the container, to initialize the environment type:
 stm
 ```
 
-This will give you a bash session with environment ready to start:
+This will give you a zsh session with environment ready to start:
 
 ```
 bitbake st-image-weston

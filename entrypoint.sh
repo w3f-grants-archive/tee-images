@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 trap "exit" SIGTERM SIGINT
 
 echo
@@ -8,5 +8,5 @@ echo "----------------------------------------"
 echo
 
 # ADD ANYTHING HERE TO CUSTOMIZE CONTAINER START UP
-
-bash -c "trap 'exit' SIGTERM SIGINT; $@"
+sudo chsh -s $(which zsh)
+zsh -c "trap 'exit' SIGTERM SIGINT; $@"
