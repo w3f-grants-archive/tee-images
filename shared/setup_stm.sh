@@ -8,5 +8,11 @@ repo sync
 
 export DISTRO=openstlinux-weston 
 export MACHINE=stm32mp1
+
 source layers/meta-st/scripts/envsetup.sh
+
+# for some reason after sourcing MACHINE is empty
+#export IMAGEDIR=$BUILDDIR/tmp-glibc/deploy/images/$MACHINE
+export IMAGEDIR=$BUILDDIR/tmp-glibc/deploy/images/stm32mp1
+
 zsh

@@ -23,7 +23,7 @@ RUN apt-get update && \
 
 # Other useful packages
 RUN apt-get update && \
-    apt-get -y install repo ccache sudo wget cpio locales gdisk tmux zsh
+    apt-get -y install repo ccache sudo wget cpio locales gdisk tmux zsh vim nano
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \

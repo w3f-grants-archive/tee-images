@@ -14,6 +14,9 @@ endef
 build:
 	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
 
+build-nocache:
+	docker build --no-cache --rm -f Dockerfile -t $(DOCKER_IMAGE) .
+
 publish:
 	docker login
 	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
