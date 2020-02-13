@@ -16,7 +16,47 @@ Once inside the container, to initialize the OpenEmbedded environment plus some 
 stm
 ```
 
-This will give you a zsh session with environment ready to start:
+This will give you a zsh session with environment ready to start.
+Before you start building please let bitbake know about meta-zondax layer:
+```
+-> bitbake-layers add-layer ../layers/meta-zondax
+```
+
+Afterwards `meta-zondax` layer should be listed in the layer list:
+```
+bitbake-layers show-layers
+NOTE: Starting bitbake server...
+layer                 path                                      priority
+==========================================================================
+meta-python           /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-python  7
+meta-oe               /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-oe  6
+meta-oe               /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-oe  6
+meta-gnome            /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-gnome  7
+meta-xfce             /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-xfce  7
+meta-initramfs        /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-initramfs  8
+meta-multimedia       /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-multimedia  6
+meta-networking       /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-networking  5
+meta-webserver        /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-webserver  6
+meta-filesystems      /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-filesystems  6
+meta-perl             /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-perl  6
+meta-python           /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-openembedded/meta-python  7
+meta-st-stm32mp       /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-st/meta-st-stm32mp  6
+meta-qt5              /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-qt5  7
+meta-st-openstlinux   /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-st/meta-st-openstlinux  5
+meta                  /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/openembedded-core/meta  5
+meta-zondax           /home/zondax/shared/zondax-meta-openstlinux-4.19-thud-mp1/layers/meta-zondax  7
+```
+
+To check what optee-related projects will be built for this image recipe, run:
+```
+$ bitbake -g st-image-core && cat pn-buildlist | grep -ve "native" | sort | uniq
+...
+opkg-utils
+optee-client
+optee-helloworld
+optee-os-stm32mp
+...
+```
 
 You can build the full/default image:
 ```
@@ -59,7 +99,7 @@ To put this raw image on sdcard:
 Now you can go outside the container and run:
 
 > Depending on your setup, it is possible that `/dev/mmcblk0` is not the correct device
-> 
+>
 > instead of `/dev/mmcblk0` it is possible that you need to use something like `/dev/sd?` if you are using card readers, etc.
 
 ```
