@@ -11,10 +11,6 @@ define run_docker
 	"$(1)"
 endef
 
-build_image:
-	# TODO: Launch a script to automate all the work
-	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
-
 build_docker:
 	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
 
@@ -26,5 +22,11 @@ publish_docker:
 pull_docker:
 	docker pull $(DOCKER_IMAGE)
 
-shell:
+login:
 	$(call run_docker,zsh)
+
+shell:
+	$(call run_docker,/home/zondax/shared/zxshell.sh)
+
+build_image:
+	$(call run_docker,/home/zondax/shared/zxbuild.sh)

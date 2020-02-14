@@ -42,21 +42,31 @@ didn't work well for you*
 
 --------
 
-You can always edit configuration files, get access to images, etc.
-in `shared` The `shared` directory can be used to exchange information with the build
-container.
+### Logging in
 
-To login into the container use
-```
-make shell
-```
+The `shared` directory can be used to exchange information with the build container.
 
-Once inside, to initialize the OpenEmbedded environment plus some handy utilities we included:
-```
-stm
-```
+To login into the container there are two options:
 
-This will give you a zsh session with environment variables ready to start. 
+- Option 1:
+  ```
+  make shell
+  ```
+
+- Option 2:
+  ```
+  make login
+  ```
+
+  Once inside, to initialize the OpenEmbedded environment plus some handy utilities we included:
+  ```
+  zxshell
+  ```
+
+Both options will give you a zsh session with environment variables ready to start. Option 2 is in case need more control over the process.
+
+### Add layers
+
 Before you start building please let bitbake know about meta-zondax layer:
 
 ```
@@ -98,6 +108,7 @@ optee-helloworld
 optee-os-stm32mp
 ...
 ```
+### Build
 
 You can build the full/default image:
 ```
@@ -109,7 +120,7 @@ or try something leaner instead
 bitbake st-image-core
 ```
 
-### Creating an image
+### Create SD-card image
 
 There is a script to build you sdcard image at
 `$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh` and many layouts that you
@@ -138,6 +149,8 @@ WARNING: before to use the command dd, please umount all the partitions associat
 To put this raw image on sdcard:
     sudo dd if=/home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/tmp-glibc/deploy/images/stm32mp1/flashlayout_st-image-weston/../flashlayout_st-image-weston_FlashLayout_sdcard_stm32mp157c-dk2-optee.raw of=/dev/mmcblk0 bs=8M conv=fdatasync status=progress
 ```
+
+### Flashing your SD-card
 
 Now you can go outside the container and run:
 
