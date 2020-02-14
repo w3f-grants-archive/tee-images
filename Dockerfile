@@ -62,7 +62,7 @@ RUN cd $HOME; \
     ln -s -f .tmux/.tmux.conf ; \
     cp .tmux/.tmux.conf.local .
 
-RUN echo "alias stm='$HOME/shared/setup_stm.sh'" >> $HOME/.zshrc
+RUN echo "alias zxshell='$HOME/shared/zxshell.sh'" >> $HOME/.zshrc
 
 ####################################
 ####################################

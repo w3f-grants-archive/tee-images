@@ -1,4 +1,9 @@
 /openstlinux-*/.repo
 /openstlinux-*/layers
 /openstlinux-*/build-*/*
-!**/build-*/conf
+
+/zondax-*/.repo
+/zondax-*/layers
+/zondax-*/build-*/*
+
+#!**/build-*/conf

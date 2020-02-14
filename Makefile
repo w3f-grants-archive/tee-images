@@ -11,19 +11,22 @@ define run_docker
 	"$(1)"
 endef
 
-build:
+build_docker:
 	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
 
-build-nocache:
-	docker build --no-cache --rm -f Dockerfile -t $(DOCKER_IMAGE) .
-
-publish:
+publish_docker:
 	docker login
 	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
 	docker push $(DOCKER_IMAGE)
 
-pull:
+pull_docker:
 	docker pull $(DOCKER_IMAGE)
 
-shell:
+login:
 	$(call run_docker,zsh)
+
+shell:
+	$(call run_docker,/home/zondax/shared/zxshell.sh)
+
+build_image:
+	$(call run_docker,/home/zondax/shared/zxbuild.sh)
