@@ -40,6 +40,7 @@ RUN chsh -s $(which zsh)
 # Fetch latest repo tool
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo \
         && chmod a+x /usr/bin/repo
+        
 ####################################
 ####################################
 # Create zondax user
@@ -47,10 +48,6 @@ RUN adduser --disabled-password --gecos "" -u 1000 --shell /usr/bin/zsh zondax
 RUN echo "zondax ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 WORKDIR /home/zondax
 USER zondax
-
-ADD entrypoint.sh /home/zondax/entrypoint.sh
-RUN mkdir -p /home/zondax/shared
-
 RUN git config --global user.email "info@zondax.ch"
 RUN git config --global user.name "zondax"
 RUN git config --global color.ui true
@@ -62,10 +59,11 @@ RUN cd $HOME; \
     ln -s -f .tmux/.tmux.conf ; \
     cp .tmux/.tmux.conf.local .
 
-RUN echo "alias zxshell='$HOME/shared/zxshell.sh'" >> $HOME/.zshrc
-
-####################################
-####################################
-
-# START SCRIPT
+ADD entrypoint.sh /home/zondax/entrypoint.sh
 ENTRYPOINT ["/home/zondax/entrypoint.sh"]
+
+####################################
+####################################
+
+RUN mkdir -p /home/zondax/shared
+RUN echo "alias zxshell='$HOME/shared/zxshell.sh'" >> $HOME/.zshrc
