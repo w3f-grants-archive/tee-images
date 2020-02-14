@@ -3,10 +3,10 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $DIR/zxenv.sh
 
-IMAGENAME="st-image-weston"
+IMAGENAME="devbase-image-bytesatwork"
 
 # Adjust layers
-bitbake-layers add-layer ../layers/meta-zondax
+#bitbake-layers add-layer ../layers/meta-zondax
 bitbake-layers show-layers
 
 # Build
@@ -16,7 +16,7 @@ echo "IMAGEDIR  : "$IMAGEDIR
 echo "IMAGENAME : "$IMAGENAME
 
 # Create image using layout
-$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh $IMAGEDIR/flashlayout_$IMAGENAME/FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
+$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh $IMAGEDIR/flashlayout_$IMAGENAME/FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
 
 # Copy raw images
 \cp $IMAGEDIR/*.raw $HOME/shared/images/
