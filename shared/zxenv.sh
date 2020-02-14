@@ -6,19 +6,25 @@
 # MANIFEST_URL=https://github.com/STMicroelectronics/oe-manifest.git
 
 # Zondax manifest
-DISTRO=openstlinux-weston
-MACHINE=stm32mp1
-TAG_NAME=zondax-meta-openstlinux-4.19-thud-mp1
-MANIFEST_URL=https://github.com/Zondax/oe-manifest.git
+DISTRO=poky-bytesatwork
+MACHINE=bytedevkit
+BRANCH=warrior
+MANIFEST_URL=https://github.com/bytesatwork/bsp-platform-st.git
+EULA=1
+
+ROOTDIR=/home/zondax/shared/${BRANCH}
 
 # Checkout and clone manifest
-mkdir -p /home/zondax/shared/${TAG_NAME} && cd /home/zondax/shared/${TAG_NAME}
-cd /home/zondax/shared/${TAG_NAME}
-repo init -u ${MANIFEST_URL} -b refs/tags/${TAG_NAME} -m default.xml
+mkdir -p ${ROOTDIR}
+cd ${ROOTDIR}
+repo init -u ${MANIFEST_URL} -b ${BRANCH} -m default.xml
 repo sync
 
-source layers/meta-st/scripts/envsetup.sh
+source setup-environment build
 
 # for some reason after sourcing MACHINE is empty
-#export IMAGEDIR=$BUILDDIR/tmp-glibc/deploy/images/$MACHINE
-IMAGEDIR=$BUILDDIR/tmp-glibc/deploy/images/stm32mp1
+IMAGEDIR=$BUILDDIR/tmp/deploy/images/bytedevkit
+
+echo
+echo The recommended development image is: devbase-image-bytesatwork
+echo

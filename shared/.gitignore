@@ -6,4 +6,6 @@
 /zondax-*/layers
 /zondax-*/build-*/*
 
+/warrior/*
+
 #!**/build-*/conf
