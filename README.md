@@ -1,25 +1,66 @@
 # ARM-TEE-Image
 
-## Build or pull the container
+## Preconditions
 
-- `make build` to build the container image
-- `make pull` to retrieve the latest published container image
+- Install Docker
+- We assume you are using Linux. While possible to use other OS (MacOS /
+  Windows), this has not been tested.
 
-## Log in
+## Build or pull the container with the build environment
 
-the `shared` directory can be used to exchange information with the build container. You can always edit configuration files, get access to images, etc. from `shared`
+- `make pull_docker` to retrieve the latest published container image
+- `make build_docker` to build the container image
 
-- `make shell` to login into the container
+-------
+## Option 1. Quick build (creating your SD card image)
 
-Once inside the container, to initialize the OpenEmbedded environment plus some handy utilities we included:
+*Follow the following steps if you just want to obtain the latest image*
+
+-------
+
+- Run `make build_image`
+
+- If everthing went well, after completion, you should have several `.raw`
+  images in `shared\images`
+- Download [Balena Etcher](https://www.balena.io/etcher)
+- Run Balena Etcher
+    > There is a known issue in balena etcher at the moment. It may be possible
+    > that you need to run it with `sudo`.
+- Select the `raw` image you want to flash, insert/select the SD card and click
+  Flash.
+- Insert the SD card in your device and reboot.
+- Enjoy
+
+-------
+
+**THIS IS WORK IN PROGRESS AND SUBJECT TO CHANGE**
+
+## Option 2. Detailed build process
+
+*Follow the following steps if you are interested in the details or option 1
+didn't work well for you*
+
+--------
+
+You can always edit configuration files, get access to images, etc.
+in `shared` The `shared` directory can be used to exchange information with the build
+container.
+
+To login into the container use
+```
+make shell
+```
+
+Once inside, to initialize the OpenEmbedded environment plus some handy utilities we included:
 ```
 stm
 ```
 
-This will give you a zsh session with environment ready to start.
+This will give you a zsh session with environment variables ready to start. 
 Before you start building please let bitbake know about meta-zondax layer:
+
 ```
--> bitbake-layers add-layer ../layers/meta-zondax
+bitbake-layers add-layer ../layers/meta-zondax
 ```
 
 Afterwards `meta-zondax` layer should be listed in the layer list:
@@ -68,9 +109,11 @@ or try something leaner instead
 bitbake st-image-core
 ```
 
-## Creating an image
+### Creating an image
 
-There is a script to build you sdcard image at `$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh` and many layouts that you can use.
+There is a script to build you sdcard image at
+`$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh` and many layouts that you
+can use.
 
 You can list layouts with:
 ```
@@ -79,33 +122,35 @@ ls $IMAGEDIR/flashlayout*/
 
 As an example, you can run:
 ```
-$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh $IMAGEDIR/flashlayout_st-image-core/FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
+$IMAGEDIR/scripts/create_sdcard_from_flashlayout.sh $IMAGEDIR/flashlayout_st-image-weston/FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
 ```
 
 this will generate an image:
 ```
 ......
 
-RAW IMAGE generated: /home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/tmp-glibc/deploy/images/stm32mp1/flashlayout_st-image-core/../flashlayout_st-image-core_FlashLayout_sdcard_stm32mp157c-dk2-optee.raw
+RAW IMAGE generated: /home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/tmp-glibc/deploy/images/stm32mp1/flashlayout_st-image-weston/../flashlayout_st-image-weston_FlashLayout_sdcard_stm32mp157c-dk2-optee.raw
 
 WARNING: before to use the command dd, please umount all the partitions associated to SDCARD.
 
     sudo umount `lsblk --list | grep mmcblk0 | grep part | gawk '{ print $7 }' | tr '\n' ' '`
 
 To put this raw image on sdcard:
-    sudo dd if=/home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/tmp-glibc/deploy/images/stm32mp1/flashlayout_st-image-core/../flashlayout_st-image-core_FlashLayout_sdcard_stm32mp157c-dk2-optee.raw of=/dev/mmcblk0 bs=8M conv=fdatasync status=progress
+    sudo dd if=/home/zondax/shared/openstlinux-4.19-thud-mp1-19-10-09/build-openstlinuxweston-stm32mp1/tmp-glibc/deploy/images/stm32mp1/flashlayout_st-image-weston/../flashlayout_st-image-weston_FlashLayout_sdcard_stm32mp157c-dk2-optee.raw of=/dev/mmcblk0 bs=8M conv=fdatasync status=progress
 ```
 
 Now you can go outside the container and run:
 
-> Depending on your setup, it is possible that `/dev/mmcblk0` is not the correct device
+> Depending on your setup, it is possible that `/dev/mmcblk0` is not the correct
+>device
 >
-> instead of `/dev/mmcblk0` it is possible that you need to use something like `/dev/sd?` if you are using card readers, etc.
+>instead of `/dev/mmcblk0` it is possible that you need to use something like
+>`/dev/sd?` if you are using card readers, etc.
 
 ```
 sudo dd if=../flashlayout_st-image-weston/../flashlayout_st-image-weston_FlashLayout_sdcard_stm32mp157c-dk2-optee.raw of=/dev/mmcblk0 bs=8M conv=fdatasync status=progress oflag=direct
 ```
-Notice the `oflag=direct` that skip catching and will show progress all the time.
+Notice the `oflag=direct` that skips catching and will show progress all the time.
 
 ## Booting and running tests
 
