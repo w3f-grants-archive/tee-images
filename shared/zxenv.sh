@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 # This scripts prepares the environment for Yocto builds
 
-# Original manifest from ST
-# TAG_NAME=openstlinux-4.19-thud-mp1-19-10-09
-# MANIFEST_URL=https://github.com/STMicroelectronics/oe-manifest.git
-
 # Zondax manifest
 
 if [ "$ZONDAX_CONF" == "dk2" ]; then
@@ -58,8 +54,8 @@ echo
 # Checkout and clone manifest
 mkdir -p ${ROOT_DIR}
 cd ${ROOT_DIR}
-repo init -u ${MANIFEST_URL} -b refs/tags/${TAG_NAME} -m ${MANIFEST_FILE}
-repo sync -j$(nproc --all)
+repo init --depth=1 -u ${MANIFEST_URL} -b refs/tags/${TAG_NAME} -m ${MANIFEST_FILE}
+repo sync -c -j$(nproc --all)
 
 echo "-----------------------------------------------------------------------"
 echo Setting up environment:
