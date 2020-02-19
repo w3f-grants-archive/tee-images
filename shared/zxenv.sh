@@ -38,7 +38,7 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
 fi
 
-ROOT_DIR=/home/zondax/shared/manifests/${IMAGE_NAME}
+ROOT_DIR=$HOME/shared/manifests/${IMAGE_NAME}
 #declare EULA_${MACHINE}=1
 EULA_stm32mp1=1
 

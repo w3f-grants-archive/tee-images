@@ -43,9 +43,23 @@ RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo 
 
 ####################################
 ####################################
-# Create zondax user
+# Create users
 RUN adduser --disabled-password --gecos "" -u 1000 --shell /usr/bin/zsh zondax
+RUN adduser --disabled-password --gecos "" -u 1001 --shell /usr/bin/zsh ci
 RUN echo "zondax ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "ci ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+####################################
+####################################
+# Configure ci user
+USER ci
+RUN git config --global user.email "info@zondax.ch"
+RUN git config --global user.name "zondax"
+RUN git config --global color.ui true
+
+####################################
+####################################
+# Configure zondax user
 WORKDIR /home/zondax
 USER zondax
 RUN git config --global user.email "info@zondax.ch"
