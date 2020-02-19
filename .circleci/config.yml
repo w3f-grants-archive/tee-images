@@ -1,0 +1,13 @@
+version: 2.0
+
+jobs:
+  build:
+    docker:
+      - image: zondax/rust-ci:latest
+    steps:
+      - run: echo "Test"
+
+workflows:
+  build_all:
+    jobs:
+      - build
