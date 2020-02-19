@@ -3,27 +3,12 @@ version: 2.0
 jobs:
   build:
     # Build default image (STM32MP157C-DK2)
+    machine: true
     working_directory: ~/project
-    resource_class: xlarge
-    docker:
-      - image: zondax/docker-stm32-optee:latest
-        environment:
-          ZONDAX_CONF: "dk2"
+    resource_class: large
     steps:
       - checkout
-      - run: /home/zondax/project/shared/zxbuild.sh
-
-  build_baw:
-    # Build bytes at work image
-    working_directory: ~/project
-    resource_class: xlarge
-    docker:
-      - image: zondax/docker-stm32-optee:latest
-        environment:
-          ZONDAX_CONF: "bytesatwork"
-    steps:
-      - checkout
-      - run: /home/zondax/project/shared/zxbuild.sh
+      - run: make build_image_dk2
 
 workflows:
   version: 2
