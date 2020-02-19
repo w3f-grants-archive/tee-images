@@ -2,8 +2,8 @@
 /openstlinux-*/layers
 /openstlinux-*/build-*/*
 
-/zondax-*/.repo
-/zondax-*/layers
-/zondax-*/build-*/*
+/zondax*
+/warrior*
+
 
 #!**/build-*/conf

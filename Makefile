@@ -6,6 +6,7 @@ define run_docker
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
 	-e DISPLAY=$(shell echo ${DISPLAY}) \
+	-e ZONDAX_CONF=$(2) \
 	-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
 	$(DOCKER_IMAGE) \
 	"$(1)"
@@ -25,8 +26,15 @@ pull_docker:
 login:
 	$(call run_docker,zsh)
 
-shell:
-	$(call run_docker,/home/zondax/shared/zxshell.sh)
+shell_bytesatwork:
+	$(call run_docker,/home/zondax/shared/zxshell.sh,bytesatwork)
 
-build_image:
-	$(call run_docker,/home/zondax/shared/zxbuild.sh)
+shell_dk2:
+	$(call run_docker,/home/zondax/shared/zxshell.sh,dk2)
+
+build_image_bytesatwork:
+	$(call run_docker,/home/zondax/shared/zxbuild.sh,bytesatwork)
+
+build_image_dk2:
+	$(call run_docker,/home/zondax/shared/zxbuild.sh,dk2)
+
