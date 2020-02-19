@@ -6,25 +6,71 @@
 # MANIFEST_URL=https://github.com/STMicroelectronics/oe-manifest.git
 
 # Zondax manifest
-DISTRO=poky-bytesatwork
-MACHINE=bytedevkit
-BRANCH=warrior
-MANIFEST_URL=https://github.com/bytesatwork/bsp-platform-st.git
-EULA=1
 
-ROOTDIR=/home/zondax/shared/${BRANCH}
+if [ "$ZONDAX_CONF" == "dk2" ]; then
+	echo "Using STM32 DK2 manifest"
+
+	DISTRO=openstlinux-weston
+	MACHINE=stm32mp1
+
+	TAG_NAME=zondax-meta-20-02-19
+	MANIFEST_URL=https://github.com/Zondax/oe-manifest.git
+
+	IMAGE_DIR=tmp-glibc/deploy/images/stm32mp1
+	IMAGE_NAME=st-image-weston
+
+	ENV_SOURCE=layers/meta-st/scripts/envsetup.sh
+	MANIFEST_FILE=default.xml
+
+	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
+elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
+	echo "Using Bytesatwork manifest"
+
+	DISTRO=poky-bytesatwork
+	MACHINE=bytedevkit
+
+	TAG_NAME=zondax-meta-bytesatwork
+	MANIFEST_URL=https://github.com/Zondax/oe-manifest.git
+
+	# for some reason after sourcing MACHINE is empty
+	IMAGE_DIR=tmp/deploy/images/bytedevkit
+	IMAGE_NAME=devbase-image-bytesatwork
+
+	ENV_SOURCE="setup-environment build"
+	MANIFEST_FILE=bytesatwork.xml
+
+	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
+fi
+
+ROOT_DIR=/home/zondax/shared/manifests/${IMAGE_NAME}
+#declare EULA_${MACHINE}=1
+EULA_stm32mp1=1
+
+BUILD_DIR=$ROOT_DIR/build
+echo
+echo "-----------------------------------------------------------------------"
+echo "Fetching \"${DISTRO}\" distribution."
+echo "From ${MANIFEST_URL}/${MANIFEST_FILE}, tag: ${TAG_NAME}"
+echo "The recommended development image is: ${IMAGE_NAME}"
+echo "-----------------------------------------------------------------------"
+echo
 
 # Checkout and clone manifest
-mkdir -p ${ROOTDIR}
-cd ${ROOTDIR}
-repo init -u ${MANIFEST_URL} -b ${BRANCH} -m default.xml
-repo sync
+mkdir -p ${ROOT_DIR}
+cd ${ROOT_DIR}
+repo init -u ${MANIFEST_URL} -b refs/tags/${TAG_NAME} -m ${MANIFEST_FILE}
+repo sync -j$(nproc --all)
 
-source setup-environment build
+echo "-----------------------------------------------------------------------"
+echo Setting up environment:
+echo "-----------------------------------------------------------------------"
 
-# for some reason after sourcing MACHINE is empty
-IMAGEDIR=$BUILDDIR/tmp/deploy/images/bytedevkit
+source ${ENV_SOURCE}
 
-echo
-echo The recommended development image is: devbase-image-bytesatwork
-echo
+echo "-----------------------------------------------------------------------"
+echo Adding Zondax Meta layer:
+echo "-----------------------------------------------------------------------"
+
+bitbake-layers add-layer ../layers/meta-zondax
+bitbake-layers show-layers
+

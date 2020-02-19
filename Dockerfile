@@ -40,7 +40,7 @@ RUN chsh -s $(which zsh)
 # Fetch latest repo tool
 RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo \
         && chmod a+x /usr/bin/repo
-        
+
 ####################################
 ####################################
 # Create zondax user
