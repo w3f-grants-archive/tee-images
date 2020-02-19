@@ -65,5 +65,5 @@ ENTRYPOINT ["/home/zondax/entrypoint.sh"]
 ####################################
 ####################################
 
-RUN mkdir -p /home/zondax/shared
+RUN mkdir -p /home/zondax/shared/images
 RUN echo "alias zxshell='$HOME/shared/zxshell.sh'" >> $HOME/.zshrc
