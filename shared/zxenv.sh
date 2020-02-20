@@ -36,11 +36,12 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	MANIFEST_FILE=bytesatwork.xml
 
 	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
+	# Scripts expects just simple EULA var set
+	EULA=1
 fi
 
 ROOT_DIR=$HOME/shared/manifests/${IMAGE_NAME}
-#declare EULA_${MACHINE}=1
-EULA_stm32mp1=1
+declare EULA_${MACHINE}=1
 
 BUILD_DIR=$ROOT_DIR/build
 echo
