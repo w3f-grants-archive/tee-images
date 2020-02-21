@@ -1,4 +1,5 @@
 # ARM-TEE-Image
+![CI](https://github.com/Zondax/ARM-TEE-Image/workflows/CI/badge.svg?branch=master)
 
 ## Preconditions
 
