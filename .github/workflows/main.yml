@@ -1,0 +1,19 @@
+name: CI
+on: [push]
+
+jobs:
+  build_dk2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start 
+      run: |
+        make build_image_dk2
+
+  build_bytesatwork:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start 
+      run: |
+        make build_image_bytesatwork

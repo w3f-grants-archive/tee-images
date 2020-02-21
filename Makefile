@@ -1,7 +1,17 @@
 DOCKER_IMAGE="zondax/docker-stm32-optee"
 
+INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
+
+ifdef INTERACTIVE
+INTERACTIVE_SETTING:="-i"
+TTY_SETTING:="-t"
+else
+INTERACTIVE_SETTING:=
+TTY_SETTING:=
+endif
+
 define run_docker
-	docker run -it --rm \
+	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	--privileged \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
@@ -13,11 +23,11 @@ define run_docker
 endef
 
 build_docker:
-	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
+	docker build --rm -f Dockerfile $(TTY_SETTING) $(DOCKER_IMAGE) .
 
 publish_docker:
 	docker login
-	docker build --rm -f Dockerfile -t $(DOCKER_IMAGE) .
+	docker build --rm -f Dockerfile $(TTY_SETTING) $(DOCKER_IMAGE) .
 	docker push $(DOCKER_IMAGE)
 
 pull_docker:
