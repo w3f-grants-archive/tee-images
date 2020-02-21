@@ -42,6 +42,12 @@ RUN curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo 
         && chmod a+x /usr/bin/repo
 
 ####################################
+# Toaster dependencies
+EXPOSE 8000
+RUN apt-get update && \
+    apt-get -y install python3 python3-pip
+
+####################################
 ####################################
 # Create users
 RUN adduser --disabled-password --gecos "" -u 1000 --shell /usr/bin/zsh zondax
