@@ -15,6 +15,7 @@ define run_docker
 	--privileged \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
+	-p 8000:8000	\
 	-e DISPLAY=$(shell echo ${DISPLAY}) \
 	-e ZONDAX_CONF=$(2) \
 	-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
@@ -41,6 +42,9 @@ shell_bytesatwork:
 
 shell_dk2:
 	$(call run_docker,/home/zondax/shared/zxshell.sh,dk2)
+
+toaster:
+	$(call run_docker,/home/zondax/shared/zxtoaster.sh,dk2)
 
 build_image_bytesatwork:
 	$(call run_docker,/home/zondax/shared/zxbuild.sh,bytesatwork)

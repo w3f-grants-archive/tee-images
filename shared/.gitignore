@@ -1,9 +1,2 @@
-/openstlinux-*/.repo
-/openstlinux-*/layers
-/openstlinux-*/build-*/*
-
-/zondax*
-/warrior*
-
-
-#!**/build-*/conf
+/st-image-weston
+/poky
