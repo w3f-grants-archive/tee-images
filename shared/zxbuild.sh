@@ -37,7 +37,7 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 
 	# Copy raw images
 	cp $IMAGE_DIR/*.raw $IMAGEOUTPUT_DIR
-elif [ "$ZONDAX_CONF" == "imx8qm" ]; then
+elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	set -e
 	# Copy raw images
 	cp $IMAGE_DIR/* $IMAGEOUTPUT_DIR
