@@ -54,7 +54,7 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	ENV_SOURCE="./fsl-setup-release.sh -b bld-wayland"
 	MANIFEST_FILE=imx-4.14.98-2.3.1.xml
 
-	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
+	FLASH_LAYOUT=NO_LAYOUT
 	# Scripts expects just simple EULA var set
 	EULA=1
 fi
