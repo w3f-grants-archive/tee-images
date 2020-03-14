@@ -1,4 +1,4 @@
-DOCKER_IMAGE="zondax/docker-stm32-optee"
+DOCKER_IMAGE="zondax/builder-yocto"
 RUSTEE_APP_LOCAL="/home/xdev/zondax/reps/hello-rustee.git"
 
 INTERACTIVE:=$(shell [ -t 0 ] && echo 1)
@@ -25,38 +25,29 @@ define run_docker
 	"$(1)"
 endef
 
-build_docker:
-	docker build --rm -f Dockerfile $(TTY_SETTING) $(DOCKER_IMAGE) .
-
-publish_docker:
-	docker login
-	docker build --rm -f Dockerfile $(TTY_SETTING) $(DOCKER_IMAGE) .
-	docker push $(DOCKER_IMAGE)
-
 pull_docker:
 	docker pull $(DOCKER_IMAGE)
 
-login:
+login: pull_docker
 	$(call run_docker,zsh)
 
-shell_bytesatwork:
+shell_bytesatwork: pull_docker
 	$(call run_docker,/home/zondax/shared/zxshell.sh,bytesatwork)
 
-shell_dk2:
+shell_dk2: pull_docker
 	$(call run_docker,/home/zondax/shared/zxshell.sh,dk2)
 
-shell_imx8mq:
+shell_imx8mq: pull_docker
 	$(call run_docker,/home/zondax/shared/zxshell.sh,imx8mq)
 
-toaster:
+toaster: pull_docker
 	$(call run_docker,/home/zondax/shared/zxtoaster.sh,dk2)
 
-build_image_bytesatwork:
+build_image_bytesatwork: pull_docker
 	$(call run_docker,/home/zondax/shared/zxbuild.sh,bytesatwork)
 
-build_image_dk2:
+build_image_dk2: pull_docker
 	$(call run_docker,/home/zondax/shared/zxbuild.sh,dk2)
 
-build_image_imx8mq:
+build_image_imx8mq: pull_docker
 	$(call run_docker,/home/zondax/shared/zxbuild.sh,imx8mq)
-

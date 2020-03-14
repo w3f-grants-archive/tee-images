@@ -1,4 +1,4 @@
-# ARM-TEE-Image
+# zondboxes-images
 ![CI](https://github.com/Zondax/ARM-TEE-Image/workflows/CI/badge.svg?branch=master)
 
 ## Preconditions
@@ -10,7 +10,6 @@
 ## Build or pull the container with the build environment
 
 - `make pull_docker` to retrieve the latest published container image
-- `make build_docker` to build the container image
 
 -------
 ## Option 1. Quick build (creating your SD card image)
@@ -19,7 +18,7 @@
 
 -------
 
-- Run `make build_image`
+- Run `make build_image_dk2`
 
 - If everthing went well, after completion, you should have several `.raw`
   images in `shared\images`
