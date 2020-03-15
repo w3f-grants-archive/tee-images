@@ -40,5 +40,7 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	set -e
 	# Copy raw images
-	cp $IMAGE_DIR/* $IMAGEOUTPUT_DIR
+	cp -L $IMAGE_DIR/*.sdcard.bz2 $IMAGEOUTPUT_DIR
+	cd $IMAGEOUTPUT_DIR
+	lbunzip2 -vdf *.sdcard.bz2
 fi

@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# This scripts prepares the environment for Yocto builds
+# This script prepares the environment for Yocto builds
+
+PATH=$PATH:$HOME/shared 
 
 # Zondax manifest
-
 if [ "$ZONDAX_CONF" == "dk2" ]; then
 	echo "Using STM32 DK2 manifest"
 
@@ -48,7 +49,7 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	MANIFEST_URL=https://source.codeaurora.org/external/imx/imx-manifest
 
 	# for some reason after sourcing MACHINE is empty
-	IMAGE_DIR=tmp/deploy/images/imx8qm
+	IMAGE_DIR=tmp/deploy/images/imx8mqevk
 	IMAGE_NAME=fsl-image-qt5-validation-imx
 
 	ENV_SOURCE="./fsl-setup-release.sh -b bld-wayland"
@@ -90,3 +91,15 @@ echo "-----------------------------------------------------------------------"
 git clone https://github.com/Zondax/meta-zondax.git $HOME/shared/meta-zondax
 bitbake-layers add-layer $HOME/shared/meta-zondax
 bitbake-layers show-layers
+
+echo
+echo "-----------------------------------------------------------------------"
+echo To build run zxbuild.sh
+echo Bitbake cheatsheet
+echo "   bitbake <image>                    e.g. bitbake ${IMAGE_NAME}"
+echo "   bitbake <recipe>                   e.g. bitbake optee-hellorustee"
+echo "   bitbake <package> -c listtasks     e.g. bitbake optee-hellorustee -c listtasks"
+echo "   bitbake <package> -c <taskname>    e.g. bitbake optee-hellorustee -c devshell"
+echo "   bitbake-layers show-layers"
+echo "   bitbake-layers show-recipes"
+echo "-----------------------------------------------------------------------"
