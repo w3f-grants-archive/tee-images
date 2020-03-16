@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # This script prepares the environment for Yocto builds
 
-PATH=$PATH:$HOME/shared 
+PATH=$PATH:$HOME/shared/scripts
 
 # Zondax manifest
 if [ "$ZONDAX_CONF" == "dk2" ]; then
@@ -26,7 +26,7 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	DISTRO=poky-bytesatwork
 	MACHINE=bytedevkit
 
-	BRANCH_NAME=refs/tags/$zondax-meta-bytesatwork
+	BRANCH_NAME=refs/tags/zondax-meta-bytesatwork
 	MANIFEST_URL=https://github.com/Zondax/oe-manifest.git
 
 	# for some reason after sourcing MACHINE is empty
