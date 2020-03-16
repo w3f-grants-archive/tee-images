@@ -1,5 +1,6 @@
-/st-image-weston
-/fsl-image-*
+/openstlinux-*
+/st-*
+/fsl-*
 /meta-zondax
 /poky
-/images/fsl*
+/images/*
