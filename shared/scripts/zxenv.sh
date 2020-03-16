@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# This scripts prepares the environment for Yocto builds
+# This script prepares the environment for Yocto builds
+
+PATH=$PATH:$HOME/shared 
 
 # Zondax manifest
-
 if [ "$ZONDAX_CONF" == "dk2" ]; then
 	echo "Using STM32 DK2 manifest"
 
 	DISTRO=openstlinux-weston
 	MACHINE=stm32mp1
 
-	TAG_NAME=zondax-meta-20-02-19
+	BRANCH_NAME=refs/tags/zondax-meta-20-02-19
 	MANIFEST_URL=https://github.com/Zondax/oe-manifest.git
 
 	IMAGE_DIR=tmp-glibc/deploy/images/stm32mp1
@@ -25,7 +26,7 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	DISTRO=poky-bytesatwork
 	MACHINE=bytedevkit
 
-	TAG_NAME=zondax-meta-bytesatwork
+	BRANCH_NAME=refs/tags/$zondax-meta-bytesatwork
 	MANIFEST_URL=https://github.com/Zondax/oe-manifest.git
 
 	# for some reason after sourcing MACHINE is empty
@@ -36,6 +37,25 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	MANIFEST_FILE=bytesatwork.xml
 
 	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
+	# Scripts expects just simple EULA var set
+	EULA=1
+elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
+	echo "Using MCIMX8M-EVKB manifest"
+
+	DISTRO=fsl-imx-wayland
+	MACHINE=imx8mqevk
+
+	BRANCH_NAME=imx-linux-sumo
+	MANIFEST_URL=https://source.codeaurora.org/external/imx/imx-manifest
+
+	# for some reason after sourcing MACHINE is empty
+	IMAGE_DIR=tmp/deploy/images/imx8mqevk
+	IMAGE_NAME=fsl-image-qt5-validation-imx
+
+	ENV_SOURCE="./fsl-setup-release.sh -b bld-wayland"
+	MANIFEST_FILE=imx-4.14.98-2.3.1.xml
+
+	FLASH_LAYOUT=NO_LAYOUT
 	# Scripts expects just simple EULA var set
 	EULA=1
 fi
@@ -55,8 +75,8 @@ echo
 # Checkout and clone manifest
 mkdir -p ${ROOT_DIR}
 cd ${ROOT_DIR}
-repo init --depth=1 -u ${MANIFEST_URL} -b refs/tags/${TAG_NAME} -m ${MANIFEST_FILE}
-repo sync -c -j$(nproc --all)
+repo init --depth=1 --no-clone-bundle -u ${MANIFEST_URL} -b ${BRANCH_NAME} -m ${MANIFEST_FILE}
+repo sync -c -j$(nproc --all) --fetch-submodules --current-branch --no-clone-bundle
 
 echo "-----------------------------------------------------------------------"
 echo Setting up environment:
@@ -68,6 +88,18 @@ echo "-----------------------------------------------------------------------"
 echo Adding Zondax Meta layer:
 echo "-----------------------------------------------------------------------"
 
-bitbake-layers add-layer ../layers/meta-zondax
+git clone https://github.com/Zondax/meta-zondax.git $HOME/shared/meta-zondax
+bitbake-layers add-layer $HOME/shared/meta-zondax
 bitbake-layers show-layers
 
+echo
+echo "-----------------------------------------------------------------------"
+echo To build run zxbuild.sh
+echo Bitbake cheatsheet
+echo "   bitbake <image>                    e.g. bitbake ${IMAGE_NAME}"
+echo "   bitbake <recipe>                   e.g. bitbake optee-hellorustee"
+echo "   bitbake <package> -c listtasks     e.g. bitbake optee-hellorustee -c listtasks"
+echo "   bitbake <package> -c <taskname>    e.g. bitbake optee-hellorustee -c devshell"
+echo "   bitbake-layers show-layers"
+echo "   bitbake-layers show-recipes"
+echo "-----------------------------------------------------------------------"
