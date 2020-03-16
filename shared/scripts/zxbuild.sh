@@ -24,7 +24,7 @@ echo "IMAGEOUTPUT : "$IMAGEOUTPUT_DIR
 if [ "$ZONDAX_CONF" == "dk2" ]; then
 	# Create image using layout
 	set -e
-	$IMAGE_DIR/scripts/create_sdcard_from_flashlayout.sh \
+	yes | $IMAGE_DIR/scripts/create_sdcard_from_flashlayout.sh \
 		$IMAGE_DIR/flashlayout_$IMAGE_NAME/$FLASH_LAYOUT
 
 	# Copy raw images
@@ -32,7 +32,7 @@ if [ "$ZONDAX_CONF" == "dk2" ]; then
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	# Create image using layout
 	set -e
-	$IMAGE_DIR/scripts/create_sdcard_from_flashlayout.sh \
+	yes | $IMAGE_DIR/scripts/create_sdcard_from_flashlayout.sh \
 		$IMAGE_DIR/flashlayout_$IMAGE_NAME/$FLASH_LAYOUT
 
 	# Copy raw images
