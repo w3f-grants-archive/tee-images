@@ -2,6 +2,7 @@
 # This script prepares the environment for Yocto builds
 
 PATH=$PATH:$HOME/shared/scripts
+ENV_SOURCE_PREFIX=
 
 # Zondax manifest
 if [ "$ZONDAX_CONF" == "dk2" ]; then
@@ -20,6 +21,7 @@ if [ "$ZONDAX_CONF" == "dk2" ]; then
 	MANIFEST_FILE=default.xml
 
 	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
+	declare EULA_${MACHINE}=1
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	echo "Using Bytesatwork manifest"
 
@@ -39,6 +41,7 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-bytedevkit.tsv
 	# Scripts expects just simple EULA var set
 	EULA=1
+	declare EULA_${MACHINE}=1
 elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	echo "Using MCIMX8M-EVKB manifest"
 
@@ -58,10 +61,34 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	FLASH_LAYOUT=NO_LAYOUT
 	# Scripts expects just simple EULA var set
 	EULA=1
+	declare EULA_${MACHINE}=1
+elif [ "$ZONDAX_CONF" == "imx8m-compulab" ]; then
+	echo "Using Compulab UCM-iMX8M-Mini manifest"
+
+	DISTRO=fsl-imx-xwayland
+	MACHINE=ucm-imx8m-mini
+
+	BRANCH_NAME=imx-linux-sumo
+	MANIFEST_URL=https://source.codeaurora.org/external/imx/imx-manifest
+
+	# for some reason after sourcing MACHINE is empty
+	IMAGE_DIR=tmp/deploy/images/imx-linux-sumo
+	#IMAGE_NAME=core-image-full-cmdline
+	IMAGE_NAME=compulab-ucm-imx8m-mini
+
+#	ENV_SOURCE_PREFIX="yes 1 | "
+	ENV_SOURCE="./sources/meta-bsp-imx8mm/tools/setup-imx8mm-env -b build-xwayland"
+	MANIFEST_FILE=imx-4.14.98-2.0.0_ga.xml
+
+	FLASH_LAYOUT=NO_LAYOUT
+
+	git clone -b master https://github.com/compulab-yokneam/meta-bsp-imx8mm.git $HOME/shared/${DISTRO}-${MACHINE}/sources/meta-bsp-imx8mm/
+	# Scripts expects just simple EULA var set
+	EULA=1
+	declare EULA_${MACHINE}=1
 fi
 
 ROOT_DIR=$HOME/shared/${DISTRO}-${MACHINE}
-declare EULA_${MACHINE}=1
 
 BUILD_DIR=$ROOT_DIR/build
 echo
@@ -82,7 +109,7 @@ echo "-----------------------------------------------------------------------"
 echo Setting up environment:
 echo "-----------------------------------------------------------------------"
 
-source ${ENV_SOURCE}
+${ENV_SOURCE_PREFIX} source ${ENV_SOURCE}
 
 echo "-----------------------------------------------------------------------"
 echo Adding Zondax Meta layer:

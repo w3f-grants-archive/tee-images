@@ -2,5 +2,5 @@
 /st-*
 /fsl-*
 /meta-zondax
-/poky
+/poky-*
 /images/*
