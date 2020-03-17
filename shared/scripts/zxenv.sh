@@ -60,7 +60,7 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	EULA=1
 fi
 
-ROOT_DIR=$HOME/shared/${DISTRO}
+ROOT_DIR=$HOME/shared/${DISTRO}-${MACHINE}
 declare EULA_${MACHINE}=1
 
 BUILD_DIR=$ROOT_DIR/build
