@@ -6,7 +6,7 @@ source $DIR/zxenv.sh
 # Build
 bitbake ${IMAGE_NAME}
 if [[ $? -ne 0 ]] ; then
-	echo 
+	echo
 	echo "Error building ${IMAGE_NAME}"
 	echo
     exit 1
