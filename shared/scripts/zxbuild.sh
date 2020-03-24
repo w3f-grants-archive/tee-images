@@ -41,4 +41,10 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	cp -L $IMAGE_DIR/*.sdcard.bz2 $IMAGEOUTPUT_DIR
 	cd $IMAGEOUTPUT_DIR
 	lbunzip2 -vdf *.sdcard.bz2
+elif [ "$ZONDAX_CONF" == "imx8m-compulab" ]; then
+	set -e
+	# Copy raw images
+	cp -L $IMAGE_DIR/*.sdcard.bz2 $IMAGEOUTPUT_DIR
+	cd $IMAGEOUTPUT_DIR
+	lbunzip2 -vdf *.sdcard.bz2
 fi

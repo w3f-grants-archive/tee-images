@@ -72,7 +72,7 @@ elif [ "$ZONDAX_CONF" == "imx8m-compulab" ]; then
 	MANIFEST_URL=https://source.codeaurora.org/external/imx/imx-manifest
 
 	# for some reason after sourcing MACHINE is empty
-	IMAGE_DIR=tmp/deploy/images/imx-linux-sumo
+	IMAGE_DIR=tmp/deploy/images/ucm-imx8m-mini
 	#IMAGE_NAME=core-image-full-cmdline
 	IMAGE_NAME=compulab-ucm-imx8m-mini
 
