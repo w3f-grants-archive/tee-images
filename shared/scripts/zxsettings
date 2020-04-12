@@ -10,6 +10,6 @@ export ROOT_DIR=${HOME}/shared/${DISTRO}
 export BUILD_DIR=${ROOT_DIR}/build
 
 # Zondax repo manifest
-export MANIFEST_BRANCH=thud
+export MANIFEST_BRANCH=zeus
 export MANIFEST_URL=https://github.com/Zondax/zondbox-manifest
 export MANIFEST_FILE=default.xml
