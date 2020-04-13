@@ -27,8 +27,7 @@ if [ "$ZONDAX_CONF" == "qemu8" ]; then
 		-object rng-random,filename=/dev/urandom,id=rng0 \
 		-device virtio-rng-pci,rng=rng0,max-bytes=1024,period=1000 \
 		-initrd rootfs.cpio.gz \
-		-kernel Image -no-acpi \
-		-append 'console=ttyAMA0,38400 keep_bootcon root=/dev/vda2'
+		-kernel Image -no-acpi
 elif [ "$ZONDAX_CONF" == "qemu" ]; then
 	set -e
 
