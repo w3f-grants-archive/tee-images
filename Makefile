@@ -62,47 +62,47 @@ define run_docker_recipe
 	"$(1)"
 endef
 
-.PHONY: pull_docker
-pull_docker:
+.PHONY: docker
+docker:
 	docker pull $(DOCKER_IMAGE)
 
-.PHONY: pull_manifest
-pull_manifest: pull_docker
+.PHONY: manifest
+manifest: docker
 	$(call run_docker,$(SCRIPTS_DIR)/zxfetch.sh,null)
 
 .PHONY: login
-login: pull_docker
+login: docker
 	$(call run_docker,zsh)
 
 .PHONY: toaster
-toaster: pull_docker
+toaster: docker
 	$(call run_docker_ext,$(SCRIPTS_DIR)/zxtoaster.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: shell
-shell: pull_docker
+shell: docker
 	$(call run_docker,$(SCRIPTS_DIR)/zxshell.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 # Building images
 .PHONY: build
-build: pull_docker
+build: docker
 	$(call run_docker,$(SCRIPTS_DIR)/zxbuild.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: run
-run : pull_docker
+run : docker
 	$(call run_docker,$(SCRIPTS_DIR)/zxrun.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 # Creating workspace so you can work locally on recipe source code
 # Example:
 # $ make workspace <recipe-name>
 .PHONY: workspace
-workspace: pull_docker
+workspace: docker
 	$(call run_docker_recipe,$(SCRIPTS_DIR)/zxworkspace.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: help
 help:
 	@echo "Usage:"
-	@echo "   make pull_docker                  Fetch Zondax docker image"
-	@echo "   make pull_manifest                Fetch Zondax repo manifest"
+	@echo "   make docker                       Fetch Zondax docker image"
+	@echo "   make manifest                     Fetch Zondax repo manifest"
 	@echo "   make login                        Simply login into docker container"
 	@echo "   make toaster <target>             Run Toaster web interface"
 	@echo "   make build <target>               Build image for <target>"
