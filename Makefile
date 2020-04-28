@@ -88,6 +88,19 @@ define run_docker_recipe
 	"$(1)"
 endef
 
+.PHONY: help
+help:
+	@echo "Usage:"
+	@echo "   make docker                       Fetch Zondax docker image"
+	@echo "   make manifest                     Fetch Zondax repo manifest"
+	@echo "   make login                        Simply login into docker container"
+	@echo "   make toaster <target>             Run Toaster web interface"
+	@echo "   make build <target>               Build image for <target>"
+	@echo "   make shell <target>               Get shell for <target>"
+	@echo "   make workspace <target> <recipe>  Create a workspace for <recipe>"
+	@echo "   make run <qemu|qemu8>             Run QEMU ARMv7/QEMU ARMv8 emulation"
+	@echo "   make run-term <qemu|qemu8>        Run QEMU emulation + fork xterm terminals for NW/SW consoles"
+
 .PHONY: docker
 docker:
 	docker pull $(DOCKER_IMAGE)
@@ -127,19 +140,6 @@ run-term: docker
 .PHONY: workspace
 workspace: docker
 	$(call run_docker_recipe,$(SCRIPTS_DIR)/zxworkspace.sh,$(filter-out $@,$(MAKECMDGOALS)))
-
-.PHONY: help
-help:
-	@echo "Usage:"
-	@echo "   make docker                       Fetch Zondax docker image"
-	@echo "   make manifest                     Fetch Zondax repo manifest"
-	@echo "   make login                        Simply login into docker container"
-	@echo "   make toaster <target>             Run Toaster web interface"
-	@echo "   make build <target>               Build image for <target>"
-	@echo "   make shell <target>               Get shell for <target>"
-	@echo "   make workspace <target> <recipe>  Create a workspace for <recipe>"
-	@echo "   make run <qemu|qemu8>             Run QEMU ARMv7/QEMU ARMv8 emulation"
-	@echo "   make run-term <qemu|qemu8>        Run QEMU emulation + fork xterm terminals for NW/SW consoles"
 
 # Drop other targets
 %:
