@@ -33,7 +33,6 @@ endif
 # $(2) is MACHINE
 define run_docker_build
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	--privileged \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
 	-p $(QDB_SERVER):$(GDB_SERVER) \
@@ -44,7 +43,6 @@ endef
 
 define run_docker_qemu
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	--privileged \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
 	-p $(QEMU_SERIAL1):$(QEMU_SERIAL1) \
@@ -64,7 +62,6 @@ endef
 # $(2) is MACHINE
 define run_docker_toaster
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	--privileged \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
 	-p 8000:8000	\
@@ -79,7 +76,6 @@ define run_docker_recipe
 	$(eval MACHINE := $(word 1, $(2)))
 	$(eval RECIPE := $(word 2, $(2)))
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
-	--privileged \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
 	-e ZONDAX_CONF=$(MACHINE) \
