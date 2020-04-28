@@ -137,6 +137,15 @@ run-term: manifest
 workspace: manifest
 	$(call run_docker_recipe,$(SCRIPTS_DIR)/zxworkspace.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
+.PHONY: dev
+dev: 
+	tmux new-session -s "zondax-dev" -d "make run qemu"
+	tmux set -g mouse on
+	tmux split-window -p 66
+	tmux split-window -d "sleep 5; make shell qemu"
+	tmux split-window -h
+	tmux attach-session -d
+
 # Drop other targets
 %:
 	@:
