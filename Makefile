@@ -110,35 +110,35 @@ manifest: docker
 	$(call run_docker_build,$(SCRIPTS_DIR)/zxfetch.sh,null)
 
 .PHONY: login
-login: docker
+login: manifest
 	$(call run_docker_build,zsh)
 
 .PHONY: toaster
-toaster: docker
+toaster: manifest
 	$(call run_docker_toaster,$(SCRIPTS_DIR)/zxtoaster.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: shell
-shell: docker
+shell: manifest
 	$(call run_docker_build,$(SCRIPTS_DIR)/zxshell.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 # Building images
 .PHONY: build
-build: docker
+build: manifest
 	$(call run_docker_build,$(SCRIPTS_DIR)/zxbuild.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: run
-run: docker
+run: manifest
 	$(call run_docker_qemu,$(SCRIPTS_DIR)/zxrun.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: run
-run-term: docker
+run-term: manifest
 	$(call run_docker_qemu_xterm,$(SCRIPTS_DIR)/zxrun.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 # Creating workspace so you can work locally on recipe source code
 # Example:
 # $ make workspace <recipe-name>
 .PHONY: workspace
-workspace: docker
+workspace: manifest
 	$(call run_docker_recipe,$(SCRIPTS_DIR)/zxworkspace.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 # Drop other targets
