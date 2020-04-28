@@ -87,6 +87,10 @@ endef
 .PHONY: help
 help:
 	@echo "Usage:"
+	@echo "   make workspace <target> <recipe>  Create a workspace for <target> <recipe>"
+	@echo "   make dev                          Launch a tmux ready environment for QEMU"
+	@echo ""
+	@echo "Others:"
 	@echo "   make docker                       Fetch Zondax docker image"
 	@echo "   make manifest                     Fetch Zondax repo manifest"
 	@echo "   make login                        Simply login into docker container"
@@ -96,6 +100,9 @@ help:
 	@echo "   make workspace <target> <recipe>  Create a workspace for <recipe>"
 	@echo "   make run <qemu|qemu8>             Run QEMU ARMv7/QEMU ARMv8 emulation"
 	@echo "   make run-term <qemu|qemu8>        Run QEMU emulation + fork xterm terminals for NW/SW consoles"
+	@echo ""
+	@echo "Typical <targets> = qemu qemu8 dk2"
+	@echo ""
 
 .PHONY: docker
 docker:
@@ -126,24 +133,29 @@ build: manifest
 run: manifest
 	$(call run_docker_qemu,$(SCRIPTS_DIR)/zxrun.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
-.PHONY: run
+.PHONY: run-term
 run-term: manifest
 	$(call run_docker_qemu_xterm,$(SCRIPTS_DIR)/zxrun.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 # Creating workspace so you can work locally on recipe source code
 # Example:
-# $ make workspace <recipe-name>
+# $ make workspace target <recipe-name>
 .PHONY: workspace
 workspace: manifest
+	# TODO: We need to improve this
 	$(call run_docker_recipe,$(SCRIPTS_DIR)/zxworkspace.sh,$(filter-out $@,$(MAKECMDGOALS)))
+	ln -s shared/zondbox-distro/build/workspace/sources sources
 
 .PHONY: dev
 dev: 
-	tmux new-session -s "zondax-dev" -d "make run qemu"
+	# TODO: We need to handle previous sessions? Kill or attach? `tmux kill-server`
+	# TODO: We need to handle preexisting stale containers?
+	# TODO: make scripts and remove all these sleeps
+	tmux new-session -s "zondax-dev" -d "make run qemu; bash"
 	tmux set -g mouse on
-	tmux split-window -p 66
-	tmux split-window -d "sleep 5; make shell qemu"
-	tmux split-window -h
+	tmux split-window -p 66 "echo 'Normal world'; sleep 15; telnet localhost 54320"
+	tmux split-window -d "echo 'Waiting for QEMU'; sleep 15; make shell qemu"
+	tmux split-window -h "echo 'Secure world'; sleep 15; telnet localhost 54321"
 	tmux attach-session -d
 
 # Drop other targets

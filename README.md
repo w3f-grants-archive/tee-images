@@ -1,16 +1,78 @@
 # zondboxes-images
-![CI](https://github.com/Zondax/ARM-TEE-Image/workflows/CI/badge.svg?branch=master)
 
 ## Preconditions
 
-- Install [Docker](https://docs.docker.com/engine/install/)
-- We assume you are using Linux. While possible to use other OS (MacOS /
-  Windows), this has not been tested.
+- Install [Docker CE](https://docs.docker.com/engine/install/)
+- We assume you are using Linux
+- Our workflow requires that you have installed tmux
 
-## Build or pull the container with the build environment
+------------
+
+## Quick path
+
+### Build qemu
+
+- `make build qemu`
+
+   This may take a while the first time. 
+   It will prepare an image similar to the OS that is being deployed in devices.
+
+### Prepare the workspace (applies to hello-rustee)
+
+- `make workspace qemu optee-hellorustee`
+
+   You will now find a symlink `sources` directory that points to the source code. You can switch branches, and work from there.
+
+### Prepare your QEMU build & test environment
+
+   We recommend opening another terminal and using:
+
+- `make dev`
+
+   This should launch a tmux session with 4 panes:
+   - Top pane: QEMU
+   - Middle panes
+     - `telnet localhost 54320`
+     - `telnet localhost 54321`
+   - Bottom pane: Bitbake
+
+- You can start the emulator by typying `c <ENTER>`
+
+### Working with your rust code
+
+- We recommend using vscode. You will find the Rust code in `<ZONDBOX-IMAGES>/sources`. There is now a symlink pointing to them.
+- You can work in two ways:
+  - Just work on Rust unit tests are usual
+  - Test in QEMU
+
+### Testing in QEMU
+
+ - If you modified your source code, you need to crosscompile. 
+   
+   Go to the bitbake window and build again, e.g.:
+     
+     `bitbake optee-hellorustee`
+
+  - Now it is time to run your new code in the device / emulator
+
+    Go to the normal world terminal (username root, no password)
+ 
+    At the moment, you need to mount the host filesystem if you didn't before:
+    
+    `mount -t 9p -o trans=virtio host /mnt`
+
+  - Run `/mnt/run_app.sh`
+
+
+---------
+---------
+
+## Longer explanation
+
+### Build or pull the container with the build environment
 - `make docker` to retrieve the latest published container image
 
-## Pull latest repo manifest
+### Pull latest repo manifest
 - `make manifest` to retrieve the latest published container image
 
 This command wraps `repo` tool and fetches the latest changes and updates of
@@ -18,7 +80,7 @@ the working files in your local environment, essentially accomplishing git fetch
 across all Git repositories listed in [default.xml](https://github.com/Zondax/zondbox-manifest)
 manifest.
 
-## QEMU ARM v7/v8 image
+### QEMU ARM v7/v8 image
 
 - Run `make build <target>`. Current supported QEMU targets are: `qemu`, `qemu8`
 - After build is finished, you can run QEMU emulator with this image:
@@ -38,8 +100,8 @@ QEMU 4.1.0 monitor - type 'help' for more information
 consoles use telnet client:
 
 ```
-$ telnet 127.0.0.1 54320
-$ telnet 127.0.0.1 54321
+$ telnet localhost 54320
+$ telnet localhost 54321
 ```
 
 - When connections are established, you can resume execution of QEMU emulator
@@ -59,7 +121,7 @@ zondbox-images.git $ make run-term qemu
 
 - When Linux inside QEMU is booted, login with `root` without password.
 
-## STM32MP1 DK2 image
+### STM32MP1 DK2 image
 
 - Run `make build <target>`. Current supported real hw targets are: `dk2`;
 - After build is finished, you can run find the raw image ready for flashing
@@ -74,7 +136,7 @@ zondbox-images.git $ sudo dd if=shared/images/dk2/flashlayout_core-image-minimal
 - When Linux is booted, login with root without password.
 
 
-## Running tests
+### Running tests
 
 When your target is booted you can verify that everything works as expected
 by using OP-TEE sanity test suit.
@@ -100,7 +162,7 @@ Also you can invoke minimal Rust TEE "hello world" application:
     [RUSTEE] => 12387
 ```
 
-## Development
+### Development
 
 ### Adjusting existing recipe
 
@@ -125,7 +187,7 @@ changes to the sources, make new commits, switch branches/remotes etc.
 - When you want rebuild the images, the sources from your workspace will be
 used instead the` SRC_URI` value specified in recipe.
 
-### Creating new recipe
+#### Creating new recipe
 
 - For creating a new example recipe you could:
 ```
@@ -144,7 +206,7 @@ Login into docker container using `make shell <target>` command, then:
  $ bitbake bbexample
 ```
 
-### OP-TEE updates deployment
+#### OP-TEE updates deployment
 
 - To avoid restarting QEMU for testing updates of userspace binaries, you
 can mount `shared` directory using this command inside QEMU terminal:
