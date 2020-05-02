@@ -14,7 +14,7 @@
 
 - `make build qemu`
 
-   This may take a while the first time. 
+   This may take a while the first time.
    It will prepare an image similar to the OS that is being deployed in devices.
 
 ### Prepare the workspace (applies to hello-rustee)
@@ -47,18 +47,18 @@
 
 ### Testing in QEMU
 
- - If you modified your source code, you need to crosscompile. 
-   
+ - If you modified your source code, you need to crosscompile.
+
    Go to the bitbake window and build again, e.g.:
-     
+
      `bitbake optee-hellorustee`
 
   - Now it is time to run your new code in the device / emulator
 
     Go to the normal world terminal (username root, no password)
- 
+
     At the moment, you need to mount the host filesystem if you didn't before:
-    
+
     `mount -t 9p -o trans=virtio host /mnt`
 
   - Run `/mnt/run_app.sh`
