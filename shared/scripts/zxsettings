@@ -13,3 +13,6 @@ export BUILD_DIR=${ROOT_DIR}/build
 export MANIFEST_BRANCH=zeus
 export MANIFEST_URL=https://github.com/Zondax/zondbox-manifest
 export MANIFEST_FILE=default.xml
+
+# QEMU sepcific configuration
+export QEMU_HOST_SSH_FWD=5555

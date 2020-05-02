@@ -15,6 +15,7 @@ SCRIPTS_DIR=/home/zondax/shared/scripts
 QEMU_SERIAL1 := 54320
 QEMU_SERIAL2 := 54321
 GDB_SERVER := 1234
+SSH_HOST_FWD := 5555
 
 gnome-terminal := $(shell command -v gnome-terminal 2>/dev/null)
 xterm := $(shell command -v xterm 2>/dev/null)
@@ -30,12 +31,23 @@ endef
 endif
 endif
 
+define run_docker_fetch
+	$(eval FORCE := $(word 1, $(2)))
+	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
+	-u $(shell id -u) \
+	-v $(shell pwd)/shared:/home/zondax/shared \
+	-p $(GDB_SERVER):$(GDB_SERVER) \
+	-e FORCE_FETCH=$(FORCE) \
+	$(DOCKER_IMAGE) \
+	"$(1)"
+endef
+
 # $(2) is MACHINE
 define run_docker_build
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
-	-p $(QDB_SERVER):$(GDB_SERVER) \
+	-p $(GDB_SERVER):$(GDB_SERVER) \
 	-e ZONDAX_CONF=$(2) \
 	$(DOCKER_IMAGE) \
 	"$(1)"
@@ -47,7 +59,8 @@ define run_docker_qemu
 	-v $(shell pwd)/shared:/home/zondax/shared \
 	-p $(QEMU_SERIAL1):$(QEMU_SERIAL1) \
 	-p $(QEMU_SERIAL2):$(QEMU_SERIAL2) \
-	-p $(QDB_SERVER):$(GDB_SERVER) \
+	-p $(GDB_SERVER):$(GDB_SERVER) \
+	-p $(SSH_HOST_FWD):$(SSH_HOST_FWD) \
 	-e ZONDAX_CONF=$(2) \
 	$(DOCKER_IMAGE) \
 	"$(1)"
@@ -93,6 +106,7 @@ help:
 	@echo "Others:"
 	@echo "   make docker                       Fetch Zondax docker image"
 	@echo "   make manifest                     Fetch Zondax repo manifest"
+	@echo "   make manifest force               Force fetch/update Zondax repo manifest"
 	@echo "   make login                        Simply login into docker container"
 	@echo "   make toaster <target>             Run Toaster web interface"
 	@echo "   make build <target>               Build image for <target>"
@@ -110,7 +124,7 @@ docker:
 
 .PHONY: manifest
 manifest: docker
-	$(call run_docker_build,$(SCRIPTS_DIR)/zxfetch.sh,null)
+	$(call run_docker_fetch,$(SCRIPTS_DIR)/zxfetch.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: login
 login: manifest
@@ -130,7 +144,7 @@ build: manifest
 	$(call run_docker_build,$(SCRIPTS_DIR)/zxbuild.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: run
-run: manifest
+run:
 	$(call run_docker_qemu,$(SCRIPTS_DIR)/zxrun.sh,$(filter-out $@,$(MAKECMDGOALS)))
 
 .PHONY: run-term
@@ -147,7 +161,7 @@ workspace: manifest
 	ln -s shared/zondbox-distro/build/workspace/sources sources
 
 .PHONY: dev
-dev: 
+dev:
 	# TODO: We need to handle previous sessions? Kill or attach? `tmux kill-server`
 	# TODO: We need to handle preexisting stale containers?
 	# TODO: make scripts and remove all these sleeps

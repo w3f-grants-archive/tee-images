@@ -16,6 +16,8 @@ COMMON_PARAMS="-s -S \
 		-d unimp -semihosting-config enable,target=native \
 		-object rng-random,filename=/dev/urandom,id=rng0 \
 		-device virtio-rng-pci,rng=rng0,max-bytes=1024,period=1000 \
+		-netdev user,id=vmnic,hostfwd=tcp::${QEMU_HOST_SSH_FWD}-:22 \
+		-device virtio-net-device,netdev=vmnic \
 		-fsdev local,id=fsdev0,path=${VIRTFS_DIR},security_model=none \
 		-device virtio-9p-device,fsdev=fsdev0,mount_tag=host"
 

@@ -12,11 +12,15 @@ echo "The recommended development image is: ${IMAGE_NAME}"
 echo "-----------------------------------------------------------------------"
 echo
 
-# Checkout and clone manifest
-mkdir -p ${ROOT_DIR}
-cd ${ROOT_DIR}
+if [ ! -d "${ROOT_DIR}/.repo" ] || [ "${FORCE_FETCH}" == "force" ]; then
+	# Checkout and clone manifest
+	mkdir -p ${ROOT_DIR}
+	cd ${ROOT_DIR}
 
-repo init --depth=1 --no-clone-bundle -u ${MANIFEST_URL} \
-	  -b ${MANIFEST_BRANCH} -m ${MANIFEST_FILE}
-repo sync -c -j$(nproc --all) --fetch-submodules \
-	  --current-branch --no-clone-bundle
+	repo init --depth=1 --no-clone-bundle -u ${MANIFEST_URL} \
+		  -b ${MANIFEST_BRANCH} -m ${MANIFEST_FILE}
+	repo sync -c -j$(nproc --all) --fetch-submodules \
+		  --current-branch --no-clone-bundle
+else
+	echo "Repo manifest is already fetched"
+fi
