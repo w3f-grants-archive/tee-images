@@ -20,6 +20,15 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	echo "Error: MCIMX8M-EVKB is not supported"
 
 	exit 1
+elif [ "$ZONDAX_CONF" == "pico-imx8m" ]; then
+	echo "Building for TechNexion PICO-i.MX8M"
+
+	MACHINE=pico-imx8mq
+	IMAGE_DIR=tmp/deploy/images/pico-imx8mq
+	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp)
+
+	declare ACCEPT_FSL_EULA=1
+
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
 	echo "Building for QEMU v8"
 
@@ -46,7 +55,7 @@ function custom_layers_clean_all () {
 	# clean cached bsp layer paths in bblayers.conf
 	# we just remove one-by-one regardless if it's listed
 	CUSTOM_LAYERS_FULL=(meta-zondax meta-zondax-qemu meta-st-stm32mp-addons
-			    meta-st-stm32mp)
+			    meta-st-stm32mp meta-tn-imx-bsp meta-freescale)
 	for i in "${CUSTOM_LAYERS_FULL[@]}"; do bitbake-layers remove-layer ${ROOT_DIR}/$i; done
 }
 

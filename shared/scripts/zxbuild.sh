@@ -42,6 +42,11 @@ elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
 	cp -L $IMAGE_DIR/*.sdcard.bz2 $IMAGEOUTPUT_DIR
 	cd $IMAGEOUTPUT_DIR
 	lbunzip2 -vdf *.sdcard.bz2
+elif [ "$ZONDAX_CONF" == "pico-imx8m" ]; then
+	set -e
+	# Copy raw images
+	cp -L $IMAGE_DIR/*.wic $IMAGEOUTPUT_DIR
+	cd $IMAGEOUTPUT_DIR
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
 	cp -L $IMAGE_DIR/bl1.bin $IMAGEOUTPUT_DIR
 	cp -L $IMAGE_DIR/bl2.bin $IMAGEOUTPUT_DIR
