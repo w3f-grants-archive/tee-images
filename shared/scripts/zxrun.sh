@@ -5,6 +5,8 @@ source $DIR/zxsettings
 
 VIRTFS_DIR=$DIR/..
 
+# Networking: https://wiki.qemu.org/index.php/Documentation/Networking#Enabling_ping_in_the_guest.2C_on_Linux_hosts
+
 IMAGEOUTPUT_DIR=$DIR/../images/${ZONDAX_CONF}
 COMMON_PARAMS="-s -S \
 		-nographic \
@@ -24,8 +26,10 @@ COMMON_PARAMS="-s -S \
 echo "Please use telnet to receive console output: "
 echo "    NW output $ telnet 127.0.0.1 54320"
 echo "    SW output $ telnet 127.0.0.1 54321"
-echo "To mount host 'shared' directory run:"
-echo "    $ mount -t 9p -o trans=virtio host <mount_point>"
+
+# This is now automatically happening!
+#echo "To mount host 'shared' directory run:"
+#echo "    $ mount -t 9p -o trans=virtio host <mount_point>"
 
 if [ "$ZONDAX_CONF" == "qemu8" ]; then
 	set -e

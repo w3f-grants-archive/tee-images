@@ -36,7 +36,6 @@ define run_docker_fetch
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
-	-p $(GDB_SERVER):$(GDB_SERVER) \
 	-e FORCE_FETCH=$(FORCE) \
 	$(DOCKER_IMAGE) \
 	"$(1)"
@@ -47,7 +46,6 @@ define run_docker_build
 	docker run $(TTY_SETTING) $(INTERACTIVE_SETTING) --rm \
 	-u $(shell id -u) \
 	-v $(shell pwd)/shared:/home/zondax/shared \
-	-p $(GDB_SERVER):$(GDB_SERVER) \
 	-e ZONDAX_CONF=$(2) \
 	$(DOCKER_IMAGE) \
 	"$(1)"
@@ -158,7 +156,7 @@ run-term: manifest
 workspace: manifest
 	# TODO: We need to improve this
 	$(call run_docker_recipe,$(SCRIPTS_DIR)/zxworkspace.sh,$(filter-out $@,$(MAKECMDGOALS)))
-	ln -s shared/zondbox-distro/build/workspace/sources sources
+	cd shared && ln -s zondbox-distro/build/workspace/sources sources
 
 .PHONY: dev
 dev:
