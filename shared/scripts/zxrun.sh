@@ -44,6 +44,5 @@ elif [ "$ZONDAX_CONF" == "qemu" ]; then
 
 	cd $IMAGEOUTPUT_DIR && $ROOT_NATIVE/usr/bin/qemu-system-arm \
 		${COMMON_PARAMS} \
-		-cpu cortex-a15 \
-		-device virtio-rng-pci,rng=rng0,max-bytes=1024,period=1000
+		-cpu cortex-a15
 fi
