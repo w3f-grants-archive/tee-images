@@ -12,7 +12,7 @@ COMMON_PARAMS="-s -S \
 		-bios bl1.bin \
 		-serial telnet:0.0.0.0:54320,server,nowait \
 		-serial telnet:0.0.0.0:54321,server,nowait \
-		-m 1057 \
+		-m 1058 \
 		-d unimp -semihosting-config enable,target=native \
 		-object rng-random,filename=/dev/urandom,id=rng0 \
 		-device virtio-rng-pci,rng=rng0,max-bytes=1024,period=1000 \
