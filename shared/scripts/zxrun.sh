@@ -35,8 +35,7 @@ if [ "$ZONDAX_CONF" == "qemu8" ]; then
 	cd $IMAGEOUTPUT_DIR && $ROOT_NATIVE/usr/bin/qemu-system-aarch64 \
 		${COMMON_PARAMS} \
 		-cpu cortex-a57 \
-		-initrd rootfs.cpio.gz \
-		-kernel Image -no-acpi
+		-no-acpi
 elif [ "$ZONDAX_CONF" == "qemu" ]; then
 	set -e
 
