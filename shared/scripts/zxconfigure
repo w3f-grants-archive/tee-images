@@ -9,7 +9,7 @@ if [ "$ZONDAX_CONF" == "dk2" ]; then
 
 	MACHINE=stm32mp1
 	IMAGE_DIR=tmp/deploy/images/stm32mp1
-	FLASH_LAYOUT=FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
+	FLASH_LAYOUT=optee/FlashLayout_sdcard_stm32mp157c-dk2-optee.tsv
 	BSP_LAYERS=(meta-st-stm32mp)
 
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
