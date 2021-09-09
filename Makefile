@@ -97,6 +97,20 @@ define run_docker_recipe
 	"$(1)"
 endef
 
+define run_dev_environment
+	$(eval MACHINE := $(word 1, $(1)))
+	$(eval MACHINE := $(if $(MACHINE),$(MACHINE), "qemu"))
+	# TODO: We need to handle previous sessions? Kill or attach? `tmux kill-server`
+	# TODO: We need to handle preexisting stale containers?
+	# TODO: make scripts and remove all these sleeps
+	tmux new-session -s "zondax-dev" -d "make run $(MACHINE); bash"
+	tmux set -g mouse on
+	tmux split-window -p 66 "echo 'Normal world'; sleep 15; telnet localhost 54320"
+	tmux split-window -d "echo 'Waiting for QEMU ($(MACHINE))'; sleep 15; make shell $(MACHINE)"
+	tmux split-window -h "echo 'Secure world'; sleep 15; telnet localhost 54321"
+	tmux attach-session -d
+endef
+
 .PHONY: help
 help:
 	@echo "Usage:"
@@ -162,15 +176,7 @@ workspace: manifest
 
 .PHONY: dev
 dev:
-	# TODO: We need to handle previous sessions? Kill or attach? `tmux kill-server`
-	# TODO: We need to handle preexisting stale containers?
-	# TODO: make scripts and remove all these sleeps
-	tmux new-session -s "zondax-dev" -d "make run qemu; bash"
-	tmux set -g mouse on
-	tmux split-window -p 66 "echo 'Normal world'; sleep 15; telnet localhost 54320"
-	tmux split-window -d "echo 'Waiting for QEMU'; sleep 15; make shell qemu"
-	tmux split-window -h "echo 'Secure world'; sleep 15; telnet localhost 54321"
-	tmux attach-session -d
+	$(call run_dev_environment, $(filter-out $@,$(MAKECMDGOALS)))
 
 # Drop other targets
 %:
