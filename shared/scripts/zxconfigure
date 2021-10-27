@@ -75,7 +75,6 @@ echo "-----------------------------------------------------------------------"
 
 bitbake-layers add-layer ${ROOT_DIR}/meta-openembedded/meta-oe/
 bitbake-layers add-layer ${ROOT_DIR}/meta-openembedded/meta-python/
-bitbake-layers add-layer ${ROOT_DIR}/meta-rust/
 
 echo "-----------------------------------------------------------------------"
 echo Adding all needed BSP layers...
