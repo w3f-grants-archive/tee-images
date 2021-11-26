@@ -10,7 +10,7 @@ export ROOT_DIR=${HOME}/shared/${DISTRO}
 export BUILD_DIR=${ROOT_DIR}/build
 
 # Zondax repo manifest
-export MANIFEST_BRANCH=honister
+export MANIFEST_BRANCH=meta_rust_bin
 export MANIFEST_URL=https://github.com/Zondax/tee-manifest
 export MANIFEST_FILE=default.xml
 

@@ -10,7 +10,7 @@ if [ "$ZONDAX_CONF" == "dk2" ]; then
 	MACHINE=stm32mp1
 	IMAGE_DIR=tmp/deploy/images/stm32mp1
 	FLASH_LAYOUT=optee/FlashLayout_sdcard_stm32mp157f-dk2-optee.tsv
-	BSP_LAYERS=(meta-st-stm32mp meta-zondax-stm32mp)
+	BSP_LAYERS=(meta-st-stm32mp meta-zondax-stm32mp meta-rust-bin)
 
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	echo "Error: Bytesatwork is not supported"
@@ -32,7 +32,7 @@ elif [ "$ZONDAX_CONF" == "flex-imx8mm" ]; then
 
 	MACHINE=flex-imx8mm
 	IMAGE_DIR=tmp/deploy/images/flex-imx8mm
-	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp)
+	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp meta-rust-bin)
 
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
 	echo "Building for QEMU v8"
@@ -62,7 +62,7 @@ function custom_layers_clean_all () {
 	# clean cached bsp layer paths in bblayers.conf
 	# we just remove one-by-one regardless if it's listed
 	CUSTOM_LAYERS_FULL=(meta-zondax meta-zondax-qemu meta-zondax-stm32mp
-			    meta-st-stm32mp meta-tn-imx-bsp meta-freescale)
+			    meta-st-stm32mp meta-tn-imx-bsp meta-freescale meta-rust-bin)
 	for i in "${CUSTOM_LAYERS_FULL[@]}"; do bitbake-layers remove-layer ${ROOT_DIR}/$i; done
 }
 
