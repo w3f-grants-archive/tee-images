@@ -36,23 +36,19 @@ elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 		$IMAGE_DIR/flashlayout_$IMAGE_NAME/$FLASH_LAYOUT
 	echo "Copy raw images to output dir"
 	cp -L $IMAGE_DIR/*.raw $IMAGEOUTPUT_DIR
-elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
+elif [ "$ZONDAX_CONF" == "imx8mq-evk" -o "$ZONDAX_CONF" == "imx8mm-evk" ]; then
 	set -e
 	# Copy raw images
-	cp -L $IMAGE_DIR/*.sdcard.bz2 $IMAGEOUTPUT_DIR
+	cp -L $IMAGE_DIR/${IMAGE_NAME}-${MACHINE}.wic.gz $IMAGEOUTPUT_DIR
 	cd $IMAGEOUTPUT_DIR
-	lbunzip2 -vdf *.sdcard.bz2
-elif [ "$ZONDAX_CONF" == "pico-imx8m" ]; then
-	set -e
-	# Copy raw images
-	cp -L $IMAGE_DIR/*.wic $IMAGEOUTPUT_DIR
-	cd $IMAGEOUTPUT_DIR
-elif [ "$ZONDAX_CONF" == "flex-imx8mm" ]; then
+	gunzip -vf ${IMAGE_NAME}-${MACHINE}.wic.gz
+elif [ "$ZONDAX_CONF" == "pico-imx8m" -o "$ZONDAX_CONF" == "flex-imx8mm" ]; then
 	set -e
 	# Copy raw images
 	cp -L $IMAGE_DIR/*.wic $IMAGEOUTPUT_DIR
-	cd $IMAGEOUTPUT_DIR
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
+	set -e
+	echo "Copy raw images to output dir..."
 	cp -L $IMAGE_DIR/bl1.bin $IMAGEOUTPUT_DIR
 	cp -L $IMAGE_DIR/bl2.bin $IMAGEOUTPUT_DIR
 	cp -L $IMAGE_DIR/bl31.bin $IMAGEOUTPUT_DIR

@@ -5,43 +5,48 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $DIR/zxenv
 
 if [ "$ZONDAX_CONF" == "dk2" ]; then
-	echo "Building for STM32 DK2"
+	echo "Building for STM32MP157F-DK2"
 
 	MACHINE=stm32mp1
 	IMAGE_DIR=tmp/deploy/images/stm32mp1
 	FLASH_LAYOUT=optee/FlashLayout_sdcard_stm32mp157f-dk2-optee.tsv
 	BSP_LAYERS=(meta-st-stm32mp meta-zondax-stm32mp)
-
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	echo "Error: Bytesatwork is not supported"
 
 	exit 1
-elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
-	echo "Error: MCIMX8M-EVKB is not supported"
+elif [ "$ZONDAX_CONF" == "imx8mq-evk" ]; then
+	echo "Building for i.MX 8M EVK"
 
-	exit 1
+	MACHINE=imx8mq-evk
+	IMAGE_DIR=tmp/deploy/images/imx8mq-evk
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "imx8mm-evk" ]; then
+	echo "Building for i.MX 8M Mini EVK"
+
+	MACHINE=imx8mm-lpddr4-evk
+	IMAGE_DIR=tmp/deploy/images/imx8mm-lpddr4-evk
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
 elif [ "$ZONDAX_CONF" == "pico-imx8m" ]; then
 	echo "Building for TechNexion PICO-i.MX8M"
 
 	MACHINE=pico-imx8mq
 	IMAGE_DIR=tmp/deploy/images/pico-imx8mq
 	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp)
-
 elif [ "$ZONDAX_CONF" == "flex-imx8mm" ]; then
 	echo "Building for TechNexion FLEX-i.MX8MM"
 
 	MACHINE=flex-imx8mm
 	IMAGE_DIR=tmp/deploy/images/flex-imx8mm
 	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp)
-
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
-	echo "Building for QEMU v8"
+	echo "Building for QEMU ARMv8"
 
 	MACHINE=qemu-optee64
 	IMAGE_DIR=tmp/deploy/images/qemu-optee64
 	BSP_LAYERS=(meta-zondax-qemu)
 elif [ "$ZONDAX_CONF" == "qemu" ]; then
-	echo "Building for QEMU"
+	echo "Building for QEMU ARMv7"
 
 	MACHINE=qemu-optee32
 	IMAGE_DIR=tmp/deploy/images/qemu-optee32
@@ -62,7 +67,7 @@ function custom_layers_clean_all () {
 	# clean cached bsp layer paths in bblayers.conf
 	# we just remove one-by-one regardless if it's listed
 	CUSTOM_LAYERS_FULL=(meta-zondax meta-zondax-qemu meta-zondax-stm32mp
-			    meta-st-stm32mp meta-tn-imx-bsp meta-freescale)
+			    meta-zondax-imx8 meta-st-stm32mp meta-freescale)
 	for i in "${CUSTOM_LAYERS_FULL[@]}"; do bitbake-layers remove-layer ${ROOT_DIR}/$i; done
 }
 
