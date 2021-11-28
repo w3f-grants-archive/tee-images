@@ -1,4 +1,4 @@
-# zondboxes-images
+# Zondax TEE - BSPs + Tooling
 
 ## Preconditions
 
