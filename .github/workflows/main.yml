@@ -6,14 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Start 
+    - name: Update Manifest
+      run: |
+        make manifest force
+    - name: Build image
       run: |
         make build_image_dk2
-
-  build_bytesatwork:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Start 
-      run: |
-        make build_image_bytesatwork
