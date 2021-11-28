@@ -1,5 +1,4 @@
-
 *.raw
-/shared/zondbox-distro
-
-
+.vscode/configurationCache.log
+.vscode/dryrun.log
+.vscode/targets.log
