@@ -11,4 +11,4 @@ jobs:
         make manifest force
     - name: Build image
       run: |
-        make build_image_dk2
+        make build dk2
