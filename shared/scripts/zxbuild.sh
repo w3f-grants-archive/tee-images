@@ -22,37 +22,24 @@ echo "IMAGENAME : "$IMAGE_NAME
 echo "IMAGEOUTPUT : "$IMAGEOUTPUT_DIR
 
 # Images are ready, apply layout and move them to the output dir
-if [ "$ZONDAX_CONF" == "dk2" ]; then
+if [ "$ZONDAX_CONF" == "dk2" -o "$ZONDAX_CONF" == "bytesatwork" ]; then
 	# Create image using layout
 	set -e
 	yes | $IMAGE_DIR/scripts/create_sdcard_from_flashlayout.sh \
 		$IMAGE_DIR/flashlayout_$IMAGE_NAME/$FLASH_LAYOUT
-	echo "Copy raw images to output dir"
+	echo "Copy raw images to output dir..."
 	cp -L $IMAGE_DIR/*.raw $IMAGEOUTPUT_DIR
-elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
-	# Create image using layout
+elif [ "$ZONDAX_CONF" == "imx8mq-evk" -o "$ZONDAX_CONF" == "imx8mm-evk" \
+	-o "$ZONDAX_CONF" == "pico-pi-imx8mq" -o "$ZONDAX_CONF" == "pico-wizard-imx8mq" \
+	-o "$ZONDAX_CONF" == "pico-pi-imx8mm" -o "$ZONDAX_CONF" == "pico-wizard-imx8mm" \
+	-o "$ZONDAX_CONF" == "flex-pi-imx8mm" -o "$ZONDAX_CONF" == "flex-wizard-imx8mm" ]; then
 	set -e
-	yes | $IMAGE_DIR/scripts/create_sdcard_from_flashlayout.sh \
-		$IMAGE_DIR/flashlayout_$IMAGE_NAME/$FLASH_LAYOUT
-	echo "Copy raw images to output dir"
-	cp -L $IMAGE_DIR/*.raw $IMAGEOUTPUT_DIR
-elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
-	set -e
-	# Copy raw images
-	cp -L $IMAGE_DIR/*.sdcard.bz2 $IMAGEOUTPUT_DIR
-	cd $IMAGEOUTPUT_DIR
-	lbunzip2 -vdf *.sdcard.bz2
-elif [ "$ZONDAX_CONF" == "pico-imx8m" ]; then
-	set -e
-	# Copy raw images
-	cp -L $IMAGE_DIR/*.wic $IMAGEOUTPUT_DIR
-	cd $IMAGEOUTPUT_DIR
-elif [ "$ZONDAX_CONF" == "flex-imx8mm" ]; then
-	set -e
-	# Copy raw images
-	cp -L $IMAGE_DIR/*.wic $IMAGEOUTPUT_DIR
-	cd $IMAGEOUTPUT_DIR
+	echo "Copy raw images to output dir..."
+	gunzip -c $IMAGE_DIR/${IMAGE_NAME}-${MACHINE}.wic.gz > \
+		$IMAGEOUTPUT_DIR/${IMAGE_NAME}-${MACHINE}.wic
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
+	set -e
+	echo "Copy raw images to output dir..."
 	cp -L $IMAGE_DIR/bl1.bin $IMAGEOUTPUT_DIR
 	cp -L $IMAGE_DIR/bl2.bin $IMAGEOUTPUT_DIR
 	cp -L $IMAGE_DIR/bl31.bin $IMAGEOUTPUT_DIR

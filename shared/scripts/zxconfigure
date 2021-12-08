@@ -5,54 +5,59 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source $DIR/zxenv
 
 if [ "$ZONDAX_CONF" == "dk2" ]; then
-	echo "Building for STM32 DK2"
-
-	MACHINE=stm32mp1
-	IMAGE_DIR=tmp/deploy/images/stm32mp1
+	echo "Building for STM32MP157F-DK2"
+	MACHINE=stm32mp1-disco-secure
 	FLASH_LAYOUT=optee/FlashLayout_sdcard_stm32mp157f-dk2-optee.tsv
 	BSP_LAYERS=(meta-st-stm32mp meta-zondax-stm32mp)
-
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
 	echo "Error: Bytesatwork is not supported"
-
 	exit 1
-elif [ "$ZONDAX_CONF" == "imx8mq" ]; then
-	echo "Error: MCIMX8M-EVKB is not supported"
-
-	exit 1
-elif [ "$ZONDAX_CONF" == "pico-imx8m" ]; then
-	echo "Building for TechNexion PICO-i.MX8M"
-
-	MACHINE=pico-imx8mq
-	IMAGE_DIR=tmp/deploy/images/pico-imx8mq
-	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp)
-
-elif [ "$ZONDAX_CONF" == "flex-imx8mm" ]; then
-	echo "Building for TechNexion FLEX-i.MX8MM"
-
-	MACHINE=flex-imx8mm
-	IMAGE_DIR=tmp/deploy/images/flex-imx8mm
-	BSP_LAYERS=(meta-freescale meta-tn-imx-bsp)
-
+elif [ "$ZONDAX_CONF" == "imx8mq-evk" ]; then
+	echo "Building for i.MX 8M EVK"
+	MACHINE=imx8mq-evk
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "imx8mm-evk" ]; then
+	echo "Building for i.MX 8M Mini EVK"
+	MACHINE=imx8mm-lpddr4-evk
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "pico-pi-imx8mq" ]; then
+	echo "Building for TechNexion PICO-PI-IMX8M"
+	MACHINE=pico-pi-imx8mq
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "pico-wizard-imx8mq" ]; then
+	echo "Building for TechNexion PICO-WIZARD-IMX8M"
+	MACHINE=pico-wizard-imx8mq
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "pico-pi-imx8mm" ]; then
+	echo "Building for TechNexion PICO-PI-IMX8M-MINI"
+	MACHINE=pico-pi-imx8mm
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "pico-wizard-imx8mm" ]; then
+	echo "Building for TechNexion PICO-WIZARD-IMX8M-MINI"
+	MACHINE=pico-wizard-imx8mm
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "flex-pi-imx8mm" ]; then
+	echo "Building for TechNexion FLEX-PI-IMX8M-MINI"
+	MACHINE=flex-pi-imx8mm
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
+elif [ "$ZONDAX_CONF" == "flex-wizard-imx8mm" ]; then
+	echo "Building for TechNexion FLEX-WIZARD-IMX8M-MINI"
+	MACHINE=flex-wizard-imx8mm
+	BSP_LAYERS=(meta-freescale meta-zondax-imx8)
 elif [ "$ZONDAX_CONF" == "qemu8" ]; then
-	echo "Building for QEMU v8"
-
+	echo "Building for QEMU ARMv8"
 	MACHINE=qemu-optee64
-	IMAGE_DIR=tmp/deploy/images/qemu-optee64
 	BSP_LAYERS=(meta-zondax-qemu)
 elif [ "$ZONDAX_CONF" == "qemu" ]; then
-	echo "Building for QEMU"
-
+	echo "Building for QEMU ARMv7"
 	MACHINE=qemu-optee32
-	IMAGE_DIR=tmp/deploy/images/qemu-optee32
 	BSP_LAYERS=(meta-zondax-qemu)
 else
 	echo "Unsupported platform $ZONDAX_CONF, exiting..."
-
 	exit 1
 fi
 
-declare ACCEPT_FSL_EULA=1
+IMAGE_DIR="tmp/deploy/images/${MACHINE}"
 
 function bsp_layers_current_add () {
 	for i in "${BSP_LAYERS[@]}"; do bitbake-layers add-layer ${ROOT_DIR}/$i; done
@@ -62,7 +67,7 @@ function custom_layers_clean_all () {
 	# clean cached bsp layer paths in bblayers.conf
 	# we just remove one-by-one regardless if it's listed
 	CUSTOM_LAYERS_FULL=(meta-zondax meta-zondax-qemu meta-zondax-stm32mp
-			    meta-st-stm32mp meta-tn-imx-bsp meta-freescale)
+			    meta-zondax-imx8 meta-st-stm32mp meta-freescale)
 	for i in "${CUSTOM_LAYERS_FULL[@]}"; do bitbake-layers remove-layer ${ROOT_DIR}/$i; done
 }
 
