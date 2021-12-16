@@ -6,7 +6,9 @@ source $DIR/zxenv
 
 if [ "$ZONDAX_CONF" == "dk2" ]; then
 	echo "Building for STM32MP157F-DK2"
-	MACHINE=stm32mp1-disco-secure
+	MACHINE=stm32mp1
+    # Disable secure boot. Uncomment line below to enable it again 
+	#MACHINE=stm32mp1-disco-secure
 	FLASH_LAYOUT=optee/FlashLayout_sdcard_stm32mp157f-dk2-optee.tsv
 	BSP_LAYERS=(meta-st-stm32mp meta-zondax-stm32mp)
 elif [ "$ZONDAX_CONF" == "bytesatwork" ]; then
