@@ -94,6 +94,17 @@ echo "-----------------------------------------------------------------------"
 bitbake-layers add-layer ${ROOT_DIR}/meta-zondax/
 bitbake-layers show-layers
 
+if [ "$ZONDAX_CONF" == "dk2" ]; then
+	echo "-----------------------------------------------------------------------"
+	echo Removing libdrm bbappend...
+	echo "-----------------------------------------------------------------------"
+
+	LIBDRM_BBAPPEND=libdrm_2.4.107.bbappend
+	pushd ${ROOT_DIR}/meta-st-stm32mp/recipes-graphics/drm
+	mv ${LIBDRM_BBAPPEND} ${LIBDRM_BBAPPEND}.bak || true
+	popd
+fi
+
 echo "-----------------------------------------------------------------------"
 echo Packages that going to be built:
 echo "-----------------------------------------------------------------------"
